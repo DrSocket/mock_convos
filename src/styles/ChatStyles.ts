@@ -166,6 +166,7 @@ export const ChatInputContainer = styled.div<ThemeProps>`
   gap: 10px;
   flex-shrink: 0; /* Prevent shrinking */
   min-height: 70px; /* Ensure consistent height */
+  box-sizing: border-box; /* Include padding in height calculations */
   
   /* Ensure visibility in mobile screenshots */
   @media screen and (max-width: 400px) {
@@ -183,9 +184,32 @@ export const ChatInput = styled.input<ThemeProps>`
   color: ${props => props.theme.text};
   font-size: 14px;
   outline: none;
+  height: 44px; /* Fixed height to prevent clipping */
+  box-sizing: border-box; /* Include padding in height */
+  line-height: 1.2; /* Ensure text fits properly */
   
   &::placeholder {
     color: ${props => props.theme.textSecondary};
+    opacity: 0.7;
+    font-weight: 400;
+  }
+  
+  &::-webkit-input-placeholder {
+    color: ${props => props.theme.textSecondary};
+    opacity: 0.7;
+    font-weight: 400;
+  }
+  
+  &::-moz-placeholder {
+    color: ${props => props.theme.textSecondary};
+    opacity: 0.7;
+    font-weight: 400;
+  }
+  
+  &:-ms-input-placeholder {
+    color: ${props => props.theme.textSecondary};
+    opacity: 0.7;
+    font-weight: 400;
   }
 `;
 

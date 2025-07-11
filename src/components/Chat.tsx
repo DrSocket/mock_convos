@@ -146,23 +146,23 @@ const Chat: React.FC<ChatProps> = ({ messages, senderName, receiverName, senderP
   if (isMobileMode) {
     return (
       <div 
+        id="mobile-download-container"
         style={{
           width: '100%',
           height: '100%',
           display: 'flex',
           justifyContent: 'center',
           alignItems: 'center',
-          padding: '20px'
+          padding: '80px 40px', // More padding for download
+          backgroundColor: '#f5f5f5' // Light background for download
         }}
       >
         <div 
           id="mobile-device-frame"
           style={{
-            width: '390px',  // iPhone 14 screen width
-            height: '844px', // iPhone 14 screen height
-            aspectRatio: '390/844', // Maintain iPhone aspect ratio
-            maxWidth: 'min(390px, calc(100vw - 160px))', // Scale down proportionally
-            maxHeight: 'min(844px, calc(100vh - 240px))', // Scale down proportionally
+            // Calculate the maximum size that fits while maintaining aspect ratio
+            width: Math.min(390, window.innerWidth - 80, (window.innerHeight - 280) * (390/844)) + 'px',
+            aspectRatio: '390/844', // This will set height automatically based on width
             borderRadius: '47px', // iPhone 14 corner radius
             overflow: 'hidden',
             backgroundColor: theme.background,

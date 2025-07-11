@@ -28,7 +28,7 @@ const AppContent: React.FC = () => {
   const [receiverName, setReceiverName] = useState<string>('Bob');
   const [senderPhoto, setSenderPhoto] = useState<string>('');
   const [receiverPhoto, setReceiverPhoto] = useState<string>('');
-  const [conversationText, setConversationText] = useState<string>('> Hey, how are you?\n< I\'m good, thanks! How about you?\n> Doing great! Want to grab coffee later?\n< Sure! What time works for you?\n> How about 3 PM?\n< Perfect! See you then 😊');
+  const [conversationText, setConversationText] = useState<string>('> Hey, how are you? \\(22:12)\n< I\'m good, thanks! How about you?\n> Doing great! Just made 10x on SOL\n< Nice bro, I just made 10x on HBAR \\(22:25)\n> Sweet, lets 10x that shit');
   const [messages, setMessages] = useState<Message[]>([]);
 
   const { getCurrentTheme, isMobileMode } = useTheme();
@@ -37,20 +37,59 @@ const AppContent: React.FC = () => {
   const parseConversation = useCallback(() => {
     const lines = conversationText.split('\n').filter(line => line.trim());
     const parsedMessages: Message[] = [];
+    let currentTime = new Date();
     
     lines.forEach(line => {
       const trimmedLine = line.trim();
       if (trimmedLine.startsWith('>')) {
+        const content = trimmedLine.substring(1).trim();
+        
+        // Check for custom time in format \(time)
+        const timeMatch = content.match(/\\?\(([^)]+)\)$/);
+        let messageText = content;
+        let messageTime = currentTime;
+        
+        if (timeMatch) {
+          const timeStr = timeMatch[1];
+          // Create a date with the custom time (today's date with custom time)
+          const today = new Date();
+          const [hours, minutes] = timeStr.split(':').map(Number);
+          if (!isNaN(hours) && !isNaN(minutes)) {
+            messageTime = new Date(today.getFullYear(), today.getMonth(), today.getDate(), hours, minutes);
+            currentTime = messageTime; // Update current time for subsequent messages
+          }
+          messageText = content.replace(/\\?\([^)]+\)$/, '').trim();
+        }
+        
         parsedMessages.push({
-          text: trimmedLine.substring(1).trim(),
+          text: messageText,
           sender: 'sender',
-          timestamp: new Date()
+          timestamp: messageTime
         });
       } else if (trimmedLine.startsWith('<')) {
+        const content = trimmedLine.substring(1).trim();
+        
+        // Check for custom time in format \(time)
+        const timeMatch = content.match(/\\?\(([^)]+)\)$/);
+        let messageText = content;
+        let messageTime = currentTime;
+        
+        if (timeMatch) {
+          const timeStr = timeMatch[1];
+          // Create a date with the custom time (today's date with custom time)
+          const today = new Date();
+          const [hours, minutes] = timeStr.split(':').map(Number);
+          if (!isNaN(hours) && !isNaN(minutes)) {
+            messageTime = new Date(today.getFullYear(), today.getMonth(), today.getDate(), hours, minutes);
+            currentTime = messageTime; // Update current time for subsequent messages
+          }
+          messageText = content.replace(/\\?\([^)]+\)$/, '').trim();
+        }
+        
         parsedMessages.push({
-          text: trimmedLine.substring(1).trim(),
+          text: messageText,
           sender: 'receiver',
-          timestamp: new Date()
+          timestamp: messageTime
         });
       }
     });

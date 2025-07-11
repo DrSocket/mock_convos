@@ -242,6 +242,8 @@ const InputPanel: React.FC<InputPanelProps> = ({
               <li>Use <code>&lt;</code> for {receiverName} messages</li>
               <li>Press Enter to create new messages</li>
               <li>Messages auto-alternate direction</li>
+              <li>Add custom time: <code>\(22:30)</code> at end of message</li>
+              <li>Time persists until next custom time is set</li>
             </ul>
           </QuickGuide>
         </ConversationContainer>
